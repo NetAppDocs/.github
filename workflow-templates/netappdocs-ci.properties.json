@@ -1,0 +1,8 @@
+{
+    "name": "NetAppDocs Workflow",
+    "description": "NetAppDocs Production CI Workflow",
+    "iconName": "netapp-icon",
+    "categories": [
+        "AsciiDoc"
+    ]
+}
