@@ -1,0 +1,14 @@
+---
+name: New-issue template
+about: Welcome and thank you for your contribution. As a reminder, anything that you
+  enter here is publicly visible. If you need to provide sensitive information, please
+  email us at doccomments@netapp.com.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+Page: url to the page
+
+[Enter your feedback here]
