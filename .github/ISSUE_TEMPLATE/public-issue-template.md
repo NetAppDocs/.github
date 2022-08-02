@@ -9,6 +9,3 @@ assignees: ''
 
 ---
 
-Page: url to the page
-
-[Enter your feedback here]
