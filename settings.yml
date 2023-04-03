@@ -1,0 +1,6 @@
+workflows_repository: .github
+include_workflows_repository: false
+
+exclude:
+  repositories:
+  - demo-internal.es-es
