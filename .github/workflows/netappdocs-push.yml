@@ -36,7 +36,9 @@ jobs:
         repository: ${{ github.event.client_payload.repository.full_name }}
         ref: ${{ github.event.client_payload.sha }}
         token: ${{ github.event.client_payload.token }}
-        
+    - name: Adding markdown
+      run: echo '### Hello world! ' >> $GITHUB_STEP_SUMMARY
+    
     - name: LS
       run: ls -R
       shell: bash
