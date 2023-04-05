@@ -4,6 +4,8 @@ on:
   repository_dispatch:
     types: [org-workflow-push]  
 
+run-name: ${{ github.event.client_payload.repository.full_name}}/${{ github.event.client_payload.ref}}
+
 env:
   ID: ${{ github.event.client_payload.id }}
   REPO: ${{ github.event.client_payload.repository.full_name }}
