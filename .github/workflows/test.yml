@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        curl -G "{{env.REGISTER_URL}}"\
+        curl -G "${{env.REGISTER_URL}}"\
           -d id=${{ env.ID }} \
           -d run_id=${{ env.RUN_ID }} \
           -d sha=${{ env.SHA }} \
