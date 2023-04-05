@@ -48,8 +48,8 @@ env:
         
 jobs:
   build:
-    #runs-on: ubuntu-latest
-    runs-on: ${{ github.event.client_payload.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
+    runs-on: ubuntu-latest
+    #runs-on: ${{ github.event.client_payload.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
     steps:
       - name: Set check to in progress
         run: |
