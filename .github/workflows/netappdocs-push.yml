@@ -1,4 +1,4 @@
-name: Example
+name: NetAppDocs Organization CI
 
 on:
   repository_dispatch:
@@ -14,7 +14,7 @@ env:
   SHA: ${{ github.event.client_payload.sha }}
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
-  DESCRIPTION_MD: 'README.md'
+  DESCRIPTION_MD: '.github/workflows/netappdocs-push.md'
 
         
 jobs:
