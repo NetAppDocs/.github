@@ -3,17 +3,37 @@ name: Example
 on:
   repository_dispatch:
     types: [org-workflow-push]  
-   
+
+env:
+  ID: ${{ github.event.client_payload.id }}
+  REPO: ${{ github.event.client_payload.repository.full_name }}
+  REPO_BRANCH: ${{ github.event.client_payload.ref }}
+  REGISTER_URL: ${{ github.event.client_payload.callback_url }}
+  SHA: ${{ github.event.client_payload.sha }}
+  RUN_ID: ${{ github.run_id }}
+  NAME: ${{ github.workflow }}
+  DESCRIPTION_MD: 'README.md'
+
+        
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+    - run: |
+        curl -G "{{env.REGISTER_URL}}"\
+          -d id=${{ env.ID }} \
+          -d run_id=${{ env.RUN_ID }} \
+          -d sha=${{ env.SHA }} \
+          --data-urlencode "name=${{ env.NAME }}" \
+          --data-urlencode "documentation=${{ env.DESCRIPTION_MD }}"
+      shell: bash
     - name: Checkout
       uses: actions/checkout@v2.3.4
       with:
         repository: ${{ github.event.client_payload.repository.full_name }}
         ref: ${{ github.event.client_payload.sha }}
         token: ${{ github.event.client_payload.token }}
+        
     - name: LS
       run: ls -R
       shell: bash
