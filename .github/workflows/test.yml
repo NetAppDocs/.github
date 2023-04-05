@@ -19,7 +19,8 @@ env:
         
 jobs:
   main:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ${{ github.event.client_payload.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
     steps:
     - run: |
         curl -G "${{env.REGISTER_URL}}"\
