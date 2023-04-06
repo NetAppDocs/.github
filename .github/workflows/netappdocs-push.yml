@@ -8,28 +8,33 @@ run-name: ${{ github.event.client_payload.repository.full_name}}/${{ github.even
 
 env:
   #New variables
-  ID: ${{ github.event.client_payload.id }}
-  REPO: ${{ github.event.client_payload.repository.full_name }}
-  REPO_BRANCH: ${{ github.event.client_payload.ref }}
-  REGISTER_URL: ${{ github.event.client_payload.callback_url }}
-  SHA: ${{ github.event.client_payload.sha }}
+  GH_APP_FLAG: true
+  GH_APP_ID: ${{ github.event.client_payload.id }}
+  GH_APP_REPO: ${{ github.event.client_payload.repository.full_name }}
+  GH_APP_EVENT_NAME: push #${{ github.event.client_payload.repository.event_name }}
+  GH_APP_HEAD_REF: ${{ github.event.client_payload.ref }}
+  GH_APP_REGISTER_URL: ${{ github.event.client_payload.callback_url }}
+  GH_APP_SHA: ${{ github.event.client_payload.sha }}
+  GH_APP_DESCRIPTION_MD: '.github/workflows/netappdocs-push.md'
+  
+  INTERNAL_FLAG: ${{ github.event.client_payload.internal }}
+  GH_DEPLOY: ${{ github.event.client_payload.token }}
+  
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
-  DESCRIPTION_MD: '.github/workflows/netappdocs-push.md'
-  GH_APP_TOKEN: ${{ github.event.client_payload.token }}
   
   #Original
-  DEPLOY_VERSION: v4
-  FRAMEWORK_BRANCH: main
-  INTERNAL_FLAG: ${{ endsWith(github.event.repository.name, '-internal') }}
-  ES_API: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.ES_API_INTERNAL || secrets.ES_API }}
-  ES_AUTH: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.ES_AUTH_INTERNAL || secrets.ES_AUTH }}
-  ES_AUTH_WEB: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.ES_AUTH_INTERNAL_WEB || secrets.ES_AUTH_WEB }}
+  DEPLOY_VERSION: v3
+  FRAMEWORK_BRANCH: iebuild-bot
+  
+  ES_API: ${{ github.event.client_payload.internal &&  secrets.ES_API_INTERNAL || secrets.ES_API }}
+  ES_AUTH: ${{ github.event.client_payload.internal &&  secrets.ES_AUTH_INTERNAL || secrets.ES_AUTH }}
+  ES_AUTH_WEB: ${{ github.event.client_payload.internal &&  secrets.ES_AUTH_INTERNAL_WEB || secrets.ES_AUTH_WEB }}
   DEPLOY_KEY_PREVIEW: ${{ secrets.DEPLOY_KEY_PREVIEW }}
   DEPLOY_HOST_PREVIEW: ${{ secrets.DEPLOY_HOST_PREVIEW }}
   GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
+  #GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
   MT_CLIENT: ${{ secrets.MT_CLIENT }}
   MT_SECRET: ${{ secrets.MT_SECRET }}
   MT_USER: ${{ secrets.MT_USER }}
@@ -40,25 +45,25 @@ env:
   LIPIDB_URL: ${{ secrets.LIPIDB_URL }}
   LIPIDB_USERNAME: ${{ secrets.LIPIDB_USERNAME }}
   LIPIDB_PASSWORD: ${{ secrets.LIPIDB_PASSWORD }}
-  CONTENT_SYNDICATION_URL: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.CONTENT_SYNDICATION_URL_INTERNAL || secrets.CONTENT_SYNDICATION_URL_PROD }}
-  CONTENT_SYNDICATION_USERNAME: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.CONTENT_SYNDICATION_USERNAME_INTERNAL || secrets.CONTENT_SYNDICATION_USERNAME_PROD }}
-  CONTENT_SYNDICATION_PASSWORD: ${{ endsWith(github.event.repository.name, '-internal') &&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
+  CONTENT_SYNDICATION_URL: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_URL_INTERNAL || secrets.CONTENT_SYNDICATION_URL_PROD }}
+  CONTENT_SYNDICATION_USERNAME: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_USERNAME_INTERNAL || secrets.CONTENT_SYNDICATION_USERNAME_PROD }}
+  CONTENT_SYNDICATION_PASSWORD: ${{ github.event.client_payload.internal&&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
 
 
         
 jobs:
   build:
-    runs-on: ubuntu-latest
-    #runs-on: ${{ github.event.client_payload.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
+    #runs-on: ubuntu-latest
+    runs-on: ${{ github.event.client_payload.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
     steps:
       - name: Set check to in progress
         run: |
-          curl -G "${{env.REGISTER_URL}}"\
-            -d id=${{ env.ID }} \
+          curl -G "${{env.GH_APP_REGISTER_URL}}"\
+            -d id=${{ env.GH_APP_ID }} \
             -d run_id=${{ env.RUN_ID }} \
-            -d sha=${{ env.SHA }} \
+            -d sha=${{ env.GH_APP_SHA }} \
             --data-urlencode "name=${{ env.NAME }}" \
-            --data-urlencode "documentation=${{ env.DESCRIPTION_MD }}"
+            --data-urlencode "documentation=${{ env.GH_APP_DESCRIPTION_MD }}"
         shell: bash
       
       - name: "Framework Checkout"
@@ -99,7 +104,7 @@ jobs:
 
       #- name: "Deploy"
       #  if: ${{ env.DEPLOY_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/deploy
+      #  uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
         
       #- name: "Translate"
       #  if: ${{ env.HARMONY_ENABLED == 'true' }}
