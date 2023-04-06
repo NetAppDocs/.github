@@ -10,7 +10,7 @@ env:
   #New variables
   GH_APP_FLAG: true
   GH_APP_ID: ${{ github.event.client_payload.id }}
-  GH_APP_REPOSITOR: ${{ github.event.client_payload.repository.full_name }}
+  GH_APP_REPOSITORY: ${{ github.event.client_payload.repository.full_name }}
   GH_APP_EVENT_NAME: ${{ github.event.client_payload.repository.event_name }}
   GH_APP_HEAD_REF: ${{ github.event.client_payload.ref }}
   GH_APP_REGISTER_URL: ${{ github.event.client_payload.callback_url }}
