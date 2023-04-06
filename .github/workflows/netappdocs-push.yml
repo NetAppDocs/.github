@@ -1,4 +1,4 @@
-name: NetAppDocs Organization CI
+name: NetAppDocs App
 
 on:
   repository_dispatch:
