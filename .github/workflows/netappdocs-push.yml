@@ -84,39 +84,39 @@ jobs:
         if: ${{ env.LIPI_ENABLED == 'true' }}
         uses: ./dependencies/jekyll/.ci/actions/lipi-adoc
       
-      #- name: "Term Check"
-      #  if: ${{ env.TERMCHECK_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/term-check 
+      - name: "Term Check"
+        if: ${{ env.TERMCHECK_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/term-check 
 
-      #- name: "Generate HTML"
-      #  uses: ./dependencies/jekyll/.ci/actions/jekyll
+      - name: "Generate HTML"
+        uses: ./dependencies/jekyll/.ci/actions/jekyll
 
-      #- name: "Generate PDF"
-      #  uses: ./dependencies/jekyll/.ci/actions/jekyll-pdf
+      - name: "Generate PDF"
+        uses: ./dependencies/jekyll/.ci/actions/jekyll-pdf
 
-      #- name: "Link Check"
-      #  if: ${{ env.LINKCHECK_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/link-check 
+      - name: "Link Check"
+        if: ${{ env.LINKCHECK_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/link-check 
         
-      #- name: "Lipi Doc site check"
-      #  if: ${{ env.LIPI_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/lipi-doc
+      - name: "Lipi Doc site check"
+        if: ${{ env.LIPI_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/lipi-doc
 
-      #- name: "Deploy"
-      #  if: ${{ env.DEPLOY_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
+      - name: "Deploy"
+        if: ${{ env.DEPLOY_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
         
       #- name: "Translate"
       #  if: ${{ env.HARMONY_ENABLED == 'true' }}
       #  uses: ./dependencies/jekyll/.ci/actions/translate
         
-      #- name: "Lipi Report"
-      #  if: ${{ always() && env.LIPI_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/lipi-report
+      - name: "Lipi Report"
+        if: ${{ always() && env.LIPI_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/lipi-report
 
-      #- name: "Post processing actions"
-      #  if: ${{ always() }}
-      #  uses: ./dependencies/jekyll/.ci/actions/post-processing
+      - name: "Post processing actions"
+        if: ${{ always() }}
+        uses: ./dependencies/jekyll/.ci/actions/post-processing
 
       - name: Cleaning up workspace path
         if: always()
