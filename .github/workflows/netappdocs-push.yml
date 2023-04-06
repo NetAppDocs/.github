@@ -47,7 +47,7 @@ env:
   LIPIDB_PASSWORD: ${{ secrets.LIPIDB_PASSWORD }}
   CONTENT_SYNDICATION_URL: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_URL_INTERNAL || secrets.CONTENT_SYNDICATION_URL_PROD }}
   CONTENT_SYNDICATION_USERNAME: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_USERNAME_INTERNAL || secrets.CONTENT_SYNDICATION_USERNAME_PROD }}
-  CONTENT_SYNDICATION_PASSWORD: ${{ github.event.client_payload.internal&&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
+  CONTENT_SYNDICATION_PASSWORD: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
 
 
         
