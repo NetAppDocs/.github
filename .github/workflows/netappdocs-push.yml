@@ -42,7 +42,7 @@ jobs:
       - name: "Test Checkout"
         uses: actions/checkout@v2
         with:
-          repository: ${{GH_APP_REPOSITORY}}
+          repository: ${{ env.GH_APP_REPOSITORY }}
           token: ${{ env.GH_DEPLOY }}
           ref: ${{ env.GH_APP_HEAD_REF }}
              
