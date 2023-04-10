@@ -1,4 +1,4 @@
-name: NetAppDocs App
+name: NetAppDocs Pull
 
 on:
   repository_dispatch:
@@ -23,33 +23,7 @@ env:
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
   
-  #Original
-  DEPLOY_VERSION: v3
-  FRAMEWORK_BRANCH: iebuild-bot
   
-  ES_API: ${{ github.event.client_payload.internal &&  secrets.ES_API_INTERNAL || secrets.ES_API }}
-  ES_AUTH: ${{ github.event.client_payload.internal &&  secrets.ES_AUTH_INTERNAL || secrets.ES_AUTH }}
-  ES_AUTH_WEB: ${{ github.event.client_payload.internal &&  secrets.ES_AUTH_INTERNAL_WEB || secrets.ES_AUTH_WEB }}
-  DEPLOY_KEY_PREVIEW: ${{ secrets.DEPLOY_KEY_PREVIEW }}
-  DEPLOY_HOST_PREVIEW: ${{ secrets.DEPLOY_HOST_PREVIEW }}
-  GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
-  MT_CLIENT: ${{ secrets.MT_CLIENT }}
-  MT_SECRET: ${{ secrets.MT_SECRET }}
-  MT_USER: ${{ secrets.MT_USER }}
-  MT_PSWD: ${{ secrets.MT_PSWD }}
-  MAESTRO_USERNAME: ${{ secrets.MAESTRO_USERNAME }}
-  MAESTRO_PASSWORD: ${{ secrets.MAESTRO_PASSWORD }}
-  TERM_CHECK_TOKEN: ${{ secrets.TERM_CHECK }}
-  LIPIDB_URL: ${{ secrets.LIPIDB_URL }}
-  LIPIDB_USERNAME: ${{ secrets.LIPIDB_USERNAME }}
-  LIPIDB_PASSWORD: ${{ secrets.LIPIDB_PASSWORD }}
-  CONTENT_SYNDICATION_URL: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_URL_INTERNAL || secrets.CONTENT_SYNDICATION_URL_PROD }}
-  CONTENT_SYNDICATION_USERNAME: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_USERNAME_INTERNAL || secrets.CONTENT_SYNDICATION_USERNAME_PROD }}
-  CONTENT_SYNDICATION_PASSWORD: ${{ github.event.client_payload.internal &&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
-
-
         
 jobs:
   build:
@@ -63,7 +37,6 @@ jobs:
             -d run_id=${{ env.RUN_ID }} \
             -d sha=${{ env.GH_APP_SHA }} \
             --data-urlencode "name=${{ env.NAME }}" \
-            --data-urlencode "documentation=${{ env.GH_APP_DESCRIPTION_MD }}"
         shell: bash
       - name: Test PR
         run: echo "Test PR"
