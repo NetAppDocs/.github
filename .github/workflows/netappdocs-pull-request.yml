@@ -46,10 +46,13 @@ jobs:
       - name: Adding markdown
         run: echo '### Hello world! ' >> $GITHUB_STEP_SUMMARY
         
+      - name: Adding markdown 2
+        run: echo '### Hello world! ' >> test.md
+        
       - name: Update MD
         run: |
-          cat $GITHUB_STEP_SUMMARY
-          MARKDOWN_URI=$(cat $GITHUB_STEP_SUMMARY |jq -sRr @uri)
+          cat test.md
+          MARKDOWN_URI=$(cat test.md |jq -sRr @uri)
           echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
             -d id=${{ env.GH_APP_ID }} \
