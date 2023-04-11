@@ -42,6 +42,14 @@ jobs:
       - name: Test PR
         run: echo "Test PR"
         shell: bash
+        
+      - name: Adding markdown
+        run: echo '### Hello world! ' >> $GITHUB_STEP_SUMMARY
+        
+      - name: Sleep for 3 minutes
+        run: sleep 180s
+        shell: bash
+        
       - name: Update MD
         run: |
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
