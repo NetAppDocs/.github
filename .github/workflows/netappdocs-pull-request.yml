@@ -48,8 +48,8 @@ jobs:
         
       - name: Update MD
         run: |
-          MARKDOWN=`cat $GITHUB_STEP_SUMMARY`
-          MARKDOWN_URI=$(printf %s ${MARKDOWN}|jq -sRr @uri)
+          cat $GITHUB_STEP_SUMMARY
+          MARKDOWN_URI=$(cat $GITHUB_STEP_SUMMARY |jq -sRr @uri)
           echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
             -d id=${{ env.GH_APP_ID }} \
@@ -62,16 +62,4 @@ jobs:
       - name: Sleep for 1 minutes
         run: sleep 60s
         shell: bash
-        
-      - name: Update MD
-        run: |
-          MARKDOWN=`cat $GITHUB_STEP_SUMMARY`
-          MARKDOWN_URI=$(printf %s ${MARKDOWN}|jq -sRr @uri)
-          echo $MARKDOWN_URI
-          curl -G "${{env.GH_APP_UPDATE_URL}}"\
-            -d id=${{ env.GH_APP_ID }} \
-            -d run_id=${{ env.RUN_ID }} \
-            -d sha=${{ env.GH_APP_SHA }} \
-            --data-urlencode "name=${{ env.NAME }}" \
-            --data-urlencode "summary=$MARKDOWN_URI" \
-        shell: bash
+
