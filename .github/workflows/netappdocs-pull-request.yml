@@ -13,7 +13,8 @@ env:
   GH_APP_REPOSITORY: ${{ github.event.client_payload.repository.full_name }}
   GH_APP_EVENT_NAME: ${{ github.event.client_payload.event_name }}
   GH_APP_HEAD_REF: ${{ github.event.client_payload.ref }}
-  GH_APP_REGISTER_URL: ${{ github.event.client_payload.callback_url }}
+  GH_APP_REGISTER_URL: ${{ github.event.client_payload.register_url }}
+  GH_APP_UPDATE_URL: ${{ github.event.client_payload.update_url }}
   GH_APP_SHA: ${{ github.event.client_payload.sha }}
   GH_APP_DESCRIPTION_MD: '.github/workflows/netappdocs-push.md'
   
@@ -40,4 +41,13 @@ jobs:
         shell: bash
       - name: Test PR
         run: echo "Test PR"
+        shell: bash
+      - name: Update MD
+        run: |
+          curl -G "${{env.GH_APP_UPDATE_URL}}"\
+            -d id=${{ env.GH_APP_ID }} \
+            -d run_id=${{ env.RUN_ID }} \
+            -d sha=${{ env.GH_APP_SHA }} \
+            --data-urlencode "name=${{ env.NAME }}" \
+            --data-urlencode "summary='# Test **B**'" \
         shell: bash
