@@ -46,16 +46,32 @@ jobs:
       - name: Adding markdown
         run: echo '### Hello world! ' >> $GITHUB_STEP_SUMMARY
         
-      - name: Sleep for 3 minutes
-        run: sleep 180s
-        shell: bash
-        
       - name: Update MD
         run: |
+          MARKDOWN=`cat $GITHUB_STEP_SUMMARY`
+          MARKDOWN_URI=$(printf %s ${MARKDOWN}|jq -sRr @uri)
+          echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
             -d id=${{ env.GH_APP_ID }} \
             -d run_id=${{ env.RUN_ID }} \
             -d sha=${{ env.GH_APP_SHA }} \
             --data-urlencode "name=${{ env.NAME }}" \
-            --data-urlencode "summary='# Test **B**'" \
+            --data-urlencode "summary=$MARKDOWN_URI" \
+        shell: bash
+        
+      - name: Sleep for 1 minutes
+        run: sleep 60s
+        shell: bash
+        
+      - name: Update MD
+        run: |
+          MARKDOWN=`cat $GITHUB_STEP_SUMMARY`
+          MARKDOWN_URI=$(printf %s ${MARKDOWN}|jq -sRr @uri)
+          echo $MARKDOWN_URI
+          curl -G "${{env.GH_APP_UPDATE_URL}}"\
+            -d id=${{ env.GH_APP_ID }} \
+            -d run_id=${{ env.RUN_ID }} \
+            -d sha=${{ env.GH_APP_SHA }} \
+            --data-urlencode "name=${{ env.NAME }}" \
+            --data-urlencode "summary=$MARKDOWN_URI" \
         shell: bash
