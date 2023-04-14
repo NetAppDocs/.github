@@ -1,47 +1,23 @@
-name: NetAppDocs Push 1
+name: NetAppDocs Build
 
 on:
-  workflow_dispatch:
-    inputs:
-      id:
-        type: string
-        description: Specific repo
-      token:
-        type: string
-        description: Specific repo
-      internal: 
-        type: string
-        description: Specific repo
-      event_name: 
-        type: string
-        description: Specific repo
-      repository:
-        type: string
-        description: Specific repo
-      branch: 
-        type: string
-        description: Specific repo
-      register_url:
-        type: string
-        description: Specific repo
-      update_url: 
-        type: string
-        description: Specific repo
-
-run-name: ${{ github.event.inputs.repository}}/${{ github.event.inputs.branch}} 
+  push:
+    branches:
+      - '*'
+      - '!main'
+run-name: <<GHAPP_NAME>>
 
 env:
   #New variables
   GH_APP_FLAG: true
-  GH_APP_ID: ${{ github.event.inputs.id }}
-  GH_APP_REPOSITORY: ${{ github.event.inputs.repository }}
-  GH_APP_EVENT_NAME: ${{ github.event.inputs.event_name }}
-  GH_APP_HEAD_REF: ${{ github.event.inputs.branch }}
-  GH_APP_REGISTER_URL: ${{ github.event.inputs.register_url }}
-  GH_APP_SHA: ${{ github.event.inputs.sha }}
+  GH_APP_ID: <<GHAPP_ID>>
+  GH_APP_REPOSITORY: <<GHAPP_REPOSITORY>>
+  GH_APP_EVENT_NAME: <<GHAPP_EVENT_NAME>>
+  GH_APP_HEAD_REF: <<GHAPP_BRANCH>>
+  GH_APP_REGISTER_URL: <<GHAPP_REGISTER_URL>>
+  GH_APP_SHA: <<GHAPP_REGISTER_SHA>>
   
-  INTERNAL_FLAG: ${{ github.event.inputs.internal == 'internal' }}
-  GH_DEPLOY: ${{secrets[github.event.inputs.token]}}
+  INTERNAL_FLAG: <<GHAPP_INTERNAL_FLAG>>
   
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
