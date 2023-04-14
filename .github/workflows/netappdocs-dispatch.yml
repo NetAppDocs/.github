@@ -1,0 +1,72 @@
+name: NetAppDocs Push 1
+
+on:
+  workflow_dispatch:
+    inputs:
+      id:
+        type: string
+        description: Specific repo
+      token:
+        type: string
+        description: Specific repo
+      internal: 
+        type: string
+        description: Specific repo
+      event_name: 
+        type: string
+        description: Specific repo
+      repository:
+        type: string
+        description: Specific repo
+      branch: 
+        type: string
+        description: Specific repo
+      register_url:
+        type: string
+        description: Specific repo
+      update_url: 
+        type: string
+        description: Specific repo
+
+run-name: ${{ github.event.inputs.repository}}/${{ github.event.inputs.branch}} 
+
+env:
+  #New variables
+  GH_APP_FLAG: true
+  GH_APP_ID: ${{ github.event.inputs.id }}
+  GH_APP_REPOSITORY: ${{ github.event.inputs.repository }}
+  GH_APP_EVENT_NAME: ${{ github.event.inputs.event_name }}
+  GH_APP_HEAD_REF: ${{ github.event.inputs.branch }}
+  GH_APP_REGISTER_URL: ${{ github.event.inputs.register_url }}
+  GH_APP_SHA: ${{ github.event.inputs.sha }}
+  
+  INTERNAL_FLAG: ${{ github.event.inputs.internal == 'internal' }}
+  GH_DEPLOY: ${{secrets[github.event.inputs.token]}}
+  
+  RUN_ID: ${{ github.run_id }}
+  NAME: ${{ github.workflow }}
+  
+  #Original
+  DEPLOY_VERSION: v3
+  FRAMEWORK_BRANCH: iebuild-bot
+  
+jobs:
+  build:
+    runs-on: ${{ github.event.inputs.internal == 'internal' && 'netappdocs-runner'  || 'ubuntu-20.04' }}
+    steps:
+      - name: Set check to in progress
+        run: |
+          curl -G "${{env.GH_APP_REGISTER_URL}}"\
+            -d id=${{ env.GH_APP_ID }} \
+            -d run_id=${{ env.RUN_ID }} \
+            -d sha=${{ env.GH_APP_SHA }} \
+            --data-urlencode "name=${{ env.NAME }}" \
+        shell: bash
+      
+      - name: "Test Checkout"
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.GH_APP_REPOSITORY }}
+          token: ${{ env.GH_DEPLOY }}
+          ref: ${{ env.GH_APP_HEAD_REF }}
+             
