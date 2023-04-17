@@ -2,7 +2,7 @@ name: NetAppDocs Pull
 
 on:
   repository_dispatch:
-    types: [org-workflow-pull]  
+    types: [org-workflow-pull2]  
 
 run-name: ${{ github.event.client_payload.repository.full_name}}/${{ github.event.client_payload.repository.ref}} ${{ github.event.client_payload.repository.message}}
 
