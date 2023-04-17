@@ -13,7 +13,7 @@ env:
   GH_APP_REPOSITORY: ${{ github.event.client_payload.repository.full_name }}
   GH_APP_EVENT_NAME: ${{ github.event.client_payload.event_name }}
   GH_APP_HEAD_REF: ${{ github.event.client_payload.ref }}
-  GH_APP_REGISTER_URL: ${{ github.event.client_payload.callback_url }}
+  GH_APP_REGISTER_URL: ${{ github.event.client_payload.register_url }}
   GH_APP_UPDATE_URL: ${{ github.event.client_payload.update_url }}
   GH_APP_SHA: ${{ github.event.client_payload.sha }}
   GH_APP_DESCRIPTION_MD: '.github/workflows/netappdocs-push.md'
