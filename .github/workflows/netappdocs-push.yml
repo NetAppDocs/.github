@@ -63,5 +63,7 @@ jobs:
             --data-urlencode "summary=$MARKDOWN_URI" \
         shell: bash
 
-             
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
     
