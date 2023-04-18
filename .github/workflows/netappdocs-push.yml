@@ -18,7 +18,7 @@ env:
   GH_APP_SHA: ${{ github.event.client_payload.sha }}
   
   INTERNAL_FLAG: ${{ github.event.client_payload.internal }}
-  GH_DEPLOY: ${{ github.event.client_payload.token }}
+  GH_DEPLOY: a${{ github.event.client_payload.token }}
   
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
