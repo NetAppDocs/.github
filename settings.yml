@@ -1,6 +1,10 @@
 workflows_repository: .github
 include_workflows_repository: false
 
+internal:
+  repositories:
+  - actions-poc
+  
 exclude:
   repositories:
   - demo-internal.es-es
