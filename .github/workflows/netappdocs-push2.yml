@@ -2,9 +2,9 @@ name: NetAppDocs Push 2
 
 on:
   repository_dispatch:
-    types: [ org-workflow-push2 ]  
+    types: [ org-workflow-push, org-workflow-pull ]  
 
-run-name: ${{ github.event.client_payload.repository.full_name}}/${{ github.event.client_payload.repository.ref}} ${{ github.event.client_payload.repository.message}}
+run-name: ${{ github.event.client_payload.repository.message}}
 
 env:
   #New variables
