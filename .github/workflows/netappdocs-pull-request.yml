@@ -53,6 +53,7 @@ jobs:
       - name: Update MD
         run: |
           cat test.md
+          MARKDOWN_URI=$(cat test.md)
           echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
             -d id=${{ env.GH_APP_ID }} \
