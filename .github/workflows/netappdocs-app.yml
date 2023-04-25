@@ -18,7 +18,7 @@ env:
   GH_APP_SHA: ${{ github.event.client_payload.sha }}
   
   INTERNAL_FLAG: ${{ github.event.client_payload.repository.internal }}
-  GH_DEPLOY: ${{ github.event.client_payload.token }}
+  #GH_DEPLOY: ${{ github.event.client_payload.token }}
   
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
@@ -34,7 +34,7 @@ env:
   DEPLOY_HOST_PREVIEW: ${{ secrets.DEPLOY_HOST_PREVIEW }}
   GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
+  GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
   MT_CLIENT: ${{ secrets.MT_CLIENT }}
   MT_SECRET: ${{ secrets.MT_SECRET }}
   MT_USER: ${{ secrets.MT_USER }}
