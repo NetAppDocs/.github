@@ -114,6 +114,7 @@ jobs:
         uses: ./dependencies/jekyll/.ci/actions/lipi-report
         
       - name: Update Summary
+        if: ${{ always() }}
         run: |
           MARKDOWN_URI=$(cat $GH_APP_STEP_SUMMARY)
           echo $MARKDOWN_URI
