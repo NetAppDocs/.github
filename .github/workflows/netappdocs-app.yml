@@ -101,9 +101,9 @@ jobs:
         if: ${{ env.LIPI_ENABLED == 'true' }}
         uses: ./dependencies/jekyll/.ci/actions/lipi-doc
 
-      #- name: "Deploy"
-      #  if: ${{ env.DEPLOY_ENABLED == 'true' }}
-      #  uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
+      - name: "Deploy"
+        if: ${{ env.DEPLOY_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
         
       #- name: "Translate"
       #  if: ${{ env.HARMONY_ENABLED == 'true' }}
