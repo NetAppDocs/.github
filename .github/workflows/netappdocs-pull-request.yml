@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [org-workflow-pull, org-workflow-push]  
 
-run-name: ${{ github.event.client_payload.repository.name}}:${{ github.event.client_payload.action.source_branch}} ${{ github.event.client_payload.repository.message}}
+run-name: ${{ github.event.client_payload.repository.name}}:${{ github.event.client_payload.repository.branch_name}} ${{ github.event.client_payload.repository.message}}
 
 env:
   #New variables
@@ -43,7 +43,7 @@ jobs:
         shell: bash
         
       - name: Adding markdown
-        run: echo '### Hello world! ' >> $GITHUB_STEP_SUMMARY
+        run: echo "### Hello world! ${{github.event.action}}" >> $GITHUB_STEP_SUMMARY
         
       - name: Adding markdown 2
         run: |
