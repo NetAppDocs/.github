@@ -1,4 +1,4 @@
-name: NetAppDocs Pull
+name: NetAppDocs APP CI
 
 on:
   repository_dispatch:
@@ -11,18 +11,44 @@ env:
   GH_APP_FLAG: true
   GH_APP_ID: ${{ github.event.client_payload.id }}
   GH_APP_REPOSITORY: ${{ github.event.client_payload.repository.full_name }}
-  GH_APP_EVENT_NAME: ${{ github.event.client_payload.action.type }}
+  GH_APP_EVENT_NAME: ${{ github.event.action }}
   GH_APP_HEAD_REF: ${{ github.event.client_payload.repository.ref }}
   GH_APP_REGISTER_URL: ${{ github.event.client_payload.register_url }}
   GH_APP_UPDATE_URL: ${{ github.event.client_payload.update_url }}
   GH_APP_SHA: ${{ github.event.client_payload.sha }}
   
-  INTERNAL_FLAG: ${{ github.event.client_payload.action.internal }}
+  INTERNAL_FLAG: ${{ github.event.client_payload.repository.internal }}
   GH_DEPLOY: ${{ github.event.client_payload.token }}
   
   RUN_ID: ${{ github.run_id }}
   NAME: ${{ github.workflow }}
   
+  #Original
+  DEPLOY_VERSION: v3
+  FRAMEWORK_BRANCH: iebuild-bot
+  
+  ES_API: ${{ github.event.client_payload.repository.internal &&  secrets.ES_API_INTERNAL || secrets.ES_API }}
+  ES_AUTH: ${{ github.event.client_payload.repository.internal &&  secrets.ES_AUTH_INTERNAL || secrets.ES_AUTH }}
+  ES_AUTH_WEB: ${{ github.event.client_payload.repository.internal &&  secrets.ES_AUTH_INTERNAL_WEB || secrets.ES_AUTH_WEB }}
+  DEPLOY_KEY_PREVIEW: ${{ secrets.DEPLOY_KEY_PREVIEW }}
+  DEPLOY_HOST_PREVIEW: ${{ secrets.DEPLOY_HOST_PREVIEW }}
+  GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  #GH_DEPLOY: ${{ secrets.GH_DEPLOY }}
+  MT_CLIENT: ${{ secrets.MT_CLIENT }}
+  MT_SECRET: ${{ secrets.MT_SECRET }}
+  MT_USER: ${{ secrets.MT_USER }}
+  MT_PSWD: ${{ secrets.MT_PSWD }}
+  MAESTRO_USERNAME: ${{ secrets.MAESTRO_USERNAME }}
+  MAESTRO_PASSWORD: ${{ secrets.MAESTRO_PASSWORD }}
+  TERM_CHECK_TOKEN: ${{ secrets.TERM_CHECK }}
+  LIPIDB_URL: ${{ secrets.LIPIDB_URL }}
+  LIPIDB_USERNAME: ${{ secrets.LIPIDB_USERNAME }}
+  LIPIDB_PASSWORD: ${{ secrets.LIPIDB_PASSWORD }}
+  CONTENT_SYNDICATION_URL: ${{ github.event.client_payload.repository.internal &&  secrets.CONTENT_SYNDICATION_URL_INTERNAL || secrets.CONTENT_SYNDICATION_URL_PROD }}
+  CONTENT_SYNDICATION_USERNAME: ${{ github.event.client_payload.repository.internal &&  secrets.CONTENT_SYNDICATION_USERNAME_INTERNAL || secrets.CONTENT_SYNDICATION_USERNAME_PROD }}
+  CONTENT_SYNDICATION_PASSWORD: ${{ github.event.client_payload.repository.internal &&  secrets.CONTENT_SYNDICATION_PASSWORD_INTERNAL || secrets.CONTENT_SYNDICATION_PASSWORD_PROD }}
+
   
         
 jobs:
@@ -38,21 +64,59 @@ jobs:
             -d sha=${{ env.GH_APP_SHA }} \
             --data-urlencode "name=${{ env.NAME }}" \
         shell: bash
-      - name: Test PR
-        run: echo "Test PR"
-        shell: bash
+    
+      - name: "Framework Checkout"
+        uses: actions/checkout@v2
+        with:
+          repository: 'NetAppDocOps/jekyll'
+          token: ${{ env.GH_TOKEN }}
+          path: dependencies/jekyll
+          ref: ${{ env.FRAMEWORK_BRANCH }}
+             
+      - name: "Configure"
+        uses: ./dependencies/jekyll/.ci/actions/configure
         
-      - name: Adding markdown
-        run: echo "### Hello world! ${{github.event.action}}" >> $GITHUB_STEP_SUMMARY
+      - name: "Install"
+        uses: ./dependencies/jekyll/.ci/actions/install
         
-      - name: Adding markdown 2
+      - name: "Lipi Adoc syntax check"
+        if: ${{ env.LIPI_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/lipi-adoc
+      
+      - name: "Term Check"
+        if: ${{ env.TERMCHECK_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/term-check 
+
+      - name: "Generate HTML"
+        uses: ./dependencies/jekyll/.ci/actions/jekyll
+
+      - name: "Generate PDF"
+        uses: ./dependencies/jekyll/.ci/actions/jekyll-pdf
+
+      - name: "Link Check"
+        if: ${{ env.LINKCHECK_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/link-check 
+        
+      - name: "Lipi Doc site check"
+        if: ${{ env.LIPI_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/lipi-doc
+
+      #- name: "Deploy"
+      #  if: ${{ env.DEPLOY_ENABLED == 'true' }}
+      #  uses: ./dependencies/jekyll/.ci/actions/deploy-github-app
+        
+      #- name: "Translate"
+      #  if: ${{ env.HARMONY_ENABLED == 'true' }}
+      #  uses: ./dependencies/jekyll/.ci/actions/translate
+        
+      - name: "Lipi Report"
+        if: ${{ always() && env.LIPI_ENABLED == 'true' }}
+        uses: ./dependencies/jekyll/.ci/actions/lipi-report
+        
+      - name: Update Summary
         run: |
           echo '### Hello world! ' >> test.md
           echo '### Hello world 2! ' >> test.md
-        
-      - name: Update MD
-        run: |
-          cat test.md
           MARKDOWN_URI=$(cat test.md)
           echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
@@ -63,7 +127,15 @@ jobs:
             --data-urlencode "summary=$MARKDOWN_URI" \
         shell: bash
         
-      - name: Sleep for 1 minutes
-        run: sleep 60s
-        shell: bash
+
+      - name: "Post processing actions"
+        if: ${{ always() }}
+        uses: ./dependencies/jekyll/.ci/actions/post-processing
+
+      - name: Cleaning up workspace path
+        if: always()
+        run: |
+          echo "Cleaning up previous run"
+          rm -rf "${{ github.workspace }}/*"
+          
 
