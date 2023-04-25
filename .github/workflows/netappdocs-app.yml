@@ -115,9 +115,7 @@ jobs:
         
       - name: Update Summary
         run: |
-          echo '### Hello world! ' >> test.md
-          echo '### Hello world 2! ' >> test.md
-          MARKDOWN_URI=$(cat test.md)
+          MARKDOWN_URI=$(cat $GH_APP_STEP_SUMMARY)
           echo $MARKDOWN_URI
           curl -G "${{env.GH_APP_UPDATE_URL}}"\
             -d id=${{ env.GH_APP_ID }} \
