@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [org-workflow-pull, org-workflow-push]  
 
-run-name: ${{ github.event.client_payload.repository.name}}:${{ github.event.client_payload.action.source_branch}} ${{ github.event.client_payload.action.message}}
+run-name: ${{ github.event.client_payload.repository.name}}:${{ github.event.client_payload.action.source_branch}} ${{ github.event.client_payload.repository.message}}
 
 env:
   #New variables
@@ -28,7 +28,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    #runs-on: ${{ github.event.client_payload.action.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
+    #runs-on: ${{ github.event.client_payload.repository.internal && 'netappdocs-runner'  || 'ubuntu-20.04' }}
     steps:
       - name: Set check to in progress
         run: |
