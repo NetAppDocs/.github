@@ -1,4 +1,4 @@
-name: Request doc changes
+name: Request doc changes (repository name required)
 description: Report a problem or make a suggestion directly from a docs.netapp.com page using the Request doc changes link.
 body:
   - type: markdown
