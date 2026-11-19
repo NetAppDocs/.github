@@ -4,8 +4,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Welcome and thank you for your contribution. 
-        
+        Welcome and thank you for your contribution.
+
         **Anything that you enter here is publicly visible.** If you need to provide sensitive information, you can email us at doccomments@netapp.com.
   - type: input
     id: repo-name
@@ -28,8 +28,8 @@ body:
   - type: textarea
     id: problem-description
     attributes:
-      label: Summary 
-      description: Required. Describe the problem. 
+      label: Summary
+      description: Required. Describe the problem.
     validations:
       required: true
   - type: checkboxes
@@ -38,5 +38,5 @@ body:
       label: Public issues must not contain sensitive information
       description: "Required. Examples of sensitive information include but are not limited to customer information, employee information, unreleased features, release dates, or confidential product information."
       options:
-        - label: This issue contains no sensitive information. 
+        - label: This issue contains no sensitive information.
           required: true
